@@ -4,8 +4,25 @@ M.colors = require("nord.palette")
 
 ---@class nord.Config
 M.config = {
+  --- Disable background colors
   transparent = false,
+  --- Enable 16 colors for :terminal
   terminal_colors = true,
+  --- Italicize comments
+  italic_comments = false,
+  --- Italicize keywords
+  italic_keywords = false,
+  --- Bold titles, folded text, etc.
+  bold_headers = true,
+  --- Use Nord backgrounds for Git diffs
+  uniform_diffs = false,
+  --- Make active and inactive statuslines the same color
+  uniform_status = false,
+  --- Make vertical window separators thicker/darker
+  bold_separators = false,
+  --- Add a background color to the current line number
+  cursorline_bg = false,
+  --- Add or override highlights
   ---@param hl table<string, vim.api.keyset.highlight>
   ---@param c NordPalette
   on_highlights = function(hl, c) end,
@@ -42,7 +59,8 @@ end
 -- This allows for easy addition of compilation caching in the future.
 function M.build_highlights()
   local c = M.colors
-  local bg = M.config.transparent and c.none or c.bg
+  local cfg = M.config
+  local bg = cfg.transparent and c.none or c.bg
 
   local hl = {
     ColorColumn = { bg = c.nord1 },
@@ -54,13 +72,13 @@ function M.build_highlights()
     Directory = { fg = c.nord8 },
     EndOfBuffer = { fg = c.nord1 },
     ErrorMsg = { fg = c.nord4, bg = c.nord11 },
-    VertSplit = { fg = c.nord2, bg = bg },
-    WinSeparator = { fg = c.nord2, bg = bg },
-    Folded = { fg = c.nord3, bg = c.nord1 },
+    VertSplit = { fg = c.nord2, bg = cfg.bold_separators and c.nord1 or bg },
+    WinSeparator = { fg = c.nord2, bg = cfg.bold_separators and c.nord1 or bg },
+    Folded = { fg = c.nord3, bg = c.nord1, bold = cfg.bold_headers },
     FoldColumn = { fg = c.nord3, bg = bg },
     SignColumn = { fg = c.nord1, bg = bg },
     LineNr = { fg = c.nord3 },
-    CursorLineNr = { fg = c.nord4, bold = true },
+    CursorLineNr = { fg = c.nord4, bg = cfg.cursorline_bg and c.nord1 or c.none },
     MatchParen = { fg = c.nord8, bg = c.nord3 },
     ModeMsg = { fg = c.nord4 },
     MsgArea = { fg = c.nord4 },
@@ -84,14 +102,14 @@ function M.build_highlights()
     SpellLocal = { sp = c.nord5, undercurl = true },
     SpellRare = { sp = c.nord6, undercurl = true },
     StatusLine = { fg = c.nord8, bg = c.nord3 },
-    StatusLineNC = { fg = c.nord4, bg = c.nord1 },
+    StatusLineNC = { fg = c.nord4, bg = cfg.uniform_status and c.nord3 or c.nord1 },
     StatusLineTerm = { fg = c.nord8, bg = c.nord3 },
-    StatusLineTermNC = { fg = c.nord4, bg = c.nord1 },
+    StatusLineTermNC = { fg = c.nord4, bg = cfg.uniform_status and c.nord3 or c.nord1 },
     TabLine = { fg = c.nord4, bg = c.nord1 },
     TabLineFill = { fg = c.nord4, bg = c.nord1 },
     TabLineSel = { fg = c.nord8, bg = c.nord3 },
     TermCursorNC = { bg = c.nord1 },
-    Title = { fg = c.nord4, bold = true },
+    Title = { fg = c.nord4, bold = cfg.bold_headers },
     Visual = { bg = c.nord2 },
     VisualNOS = { bg = c.nord2 },
     WarningMsg = { fg = c.nord0, bg = c.nord13 },
@@ -99,7 +117,7 @@ function M.build_highlights()
     WildMenu = { fg = c.nord8, bg = c.nord1 },
 
     -- Standard syntax
-    Comment = { fg = c.comment, italic = true },
+    Comment = { fg = c.comment, italic = cfg.italic_comments },
     Constant = { fg = c.nord4 },
     Decorator = { fg = c.nord12 },
     String = { fg = c.green },
@@ -114,7 +132,7 @@ function M.build_highlights()
     Repeat = { fg = c.keyword },
     Label = { fg = c.keyword },
     Operator = { fg = c.keyword },
-    Keyword = { fg = c.keyword, italic = true },
+    Keyword = { fg = c.keyword, italic = cfg.italic_keywords },
     Exception = { fg = c.keyword },
     PreProc = { fg = c.keyword },
     Include = { fg = c.keyword },
@@ -129,7 +147,7 @@ function M.build_highlights()
     SpecialChar = { fg = c.yellow },
     Tag = { fg = c.nord4 },
     Delimiter = { fg = c.nord6 },
-    SpecialComment = { fg = c.frost, italic = true },
+    SpecialComment = { fg = c.frost, italic = cfg.italic_comments },
     Debug = { fg = c.error },
     Underlined = { underline = true },
     Bold = { bold = true },
@@ -154,10 +172,10 @@ function M.build_highlights()
     DiagnosticUnderlineHint = { undercurl = true, sp = c.accent },
 
     -- Diff
-    DiffAdd = { fg = c.green, bg = c.nord0 },
-    DiffChange = { fg = c.yellow, bg = c.nord0 },
-    DiffDelete = { fg = c.error, bg = c.nord0 },
-    DiffText = { fg = c.keyword, bg = c.nord0 },
+    DiffAdd = { fg = c.green, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
+    DiffChange = { fg = c.yellow, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
+    DiffDelete = { fg = c.error, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
+    DiffText = { fg = c.keyword, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
 
     -- GitSigns
     GitSignsAdd = { fg = c.green, bg = c.nord0 },

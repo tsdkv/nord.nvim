@@ -14,8 +14,19 @@ vim.pack.add({
 })
 
 require("nord").setup({
-  transparent = false, -- Disable background colors
+  transparent = false,
   terminal_colors = true,
+
+  -- Text Styling
+  italic_comments = false,
+  italic_keywords = false,
+  bold_headers = true,      -- Affects Titles, Folds, etc.
+
+  -- Editor UI Tweaks
+  uniform_diffs = false,    -- Uses Nord backgrounds for Git diffs
+  uniform_status = false,   -- Makes active and inactive statuslines the same color
+  bold_separators = false,  -- Makes vertical window separators thicker/darker
+  cursorline_bg = false,    -- Adds a background color to the current line number
 
   -- Add or override highlights
   on_highlights = function(hl, c)
@@ -31,6 +42,22 @@ require("nord").setup({
 vim.cmd.colorscheme("nord")
 ```
 
+## Migration from nord.vim
+
+If you are migrating from the original `nord.vim`, the old `g:nord_*` global variables have been replaced with a cleaner Lua table in `setup()`:
+
+| Original `nord.vim` variable | `nord.nvim` config option |
+|------------------------------|---------------------------|
+| `g:nord_italic_comments` | `italic_comments` |
+| `g:nord_italic` | `italic_keywords` |
+| `g:nord_bold` | `bold_headers` |
+| `g:nord_uniform_diff_background`| `uniform_diffs` |
+| `g:nord_uniform_status_lines` | `uniform_status` |
+| `g:nord_bold_vertical_split_line`| `bold_separators` |
+| `g:nord_cursor_line_number_background`| `cursorline_bg` |
+
+*Note: Global toggles like `g:nord_underline` were removed in favor of native Neovim styling (e.g., undercurls for spelling).*
+
 ## The Palette
 
 In `on_highlights(hl, c)`, the `c` argument exposes the full palette. You can use raw Nord colors (`c.nord0` ... `c.nord15`) or semantic aliases:
@@ -45,7 +72,8 @@ In `on_highlights(hl, c)`, the `c` argument exposes the full palette. You can us
 - `c.keyword` (`nord9`)
 - `c.accent` (`nord10`)
 - `c.error` (`nord11`)
-- `c.warn` (`nord12`)
+- `c.orange` (`nord12`)
+- `c.warn` (`nord13`)
 - `c.yellow` (`nord13`)
 - `c.green` (`nord14`)
 - `c.purple` (`nord15`)

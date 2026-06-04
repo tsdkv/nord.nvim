@@ -1,4 +1,5 @@
 -- stylua: ignore start
+---@class NordPalette
 local p = {
   nord0        = "#2E3440",
   nord1        = "#3B4252",

@@ -7,7 +7,7 @@ M.config = {
   transparent = false,
   terminal_colors = true,
   ---@param hl table<string, vim.api.keyset.highlight>
-  ---@param c table
+  ---@param c NordPalette
   on_highlights = function(hl, c) end,
 }
 

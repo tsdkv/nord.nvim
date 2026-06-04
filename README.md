@@ -1,45 +1,35 @@
 # nord.nvim
 
-A clean and minimal [Nord](https://www.nordtheme.com/) theme for Neovim, written in Lua.
+As close to the original [nordtheme/vim](https://github.com/nordtheme/vim) as possible, but loads 10 times faster.
 
-This theme is designed to accurately reflect the original [nordtheme/vim](https://github.com/nordtheme/vim) colors while keeping the codebase as simple as possible. It has zero built-in plugin dependencies, but allows you to easily add your own highlights.
+It does not include third-party plugin support, providing just the core colors and an easy hook to add your own highlights.
 
 ## Installation
 
-Using [lazy.nvim](https://github.com/folke/lazy.nvim):
+Using Neovim's native package manager (`vim.pack.add`):
 
 ```lua
-{
-  "tsdkv/nord.nvim",
-  config = function()
-    require("nord").setup({
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      transparent = false,
-      terminal_colors = true,
-      
-      -- Custom overrides hook
-      on_highlights = function(hl, c)
-        -- Example: Make comments bold and use the frost color
-        hl.Comment = { fg = c.frost, bold = true }
-        
-        -- Example: Add telescope support
-        hl.TelescopeNormal = { bg = c.nord1 }
-        hl.TelescopeBorder = { fg = c.nord3, bg = c.nord1 }
-      end,
-    })
-    vim.cmd.colorscheme("nord")
-  end
-}
+vim.pack.add({
+  "https://github.com/tsdkv/nord.nvim"
+})
+
+require("nord").setup({
+  transparent = false, -- Disable background colors
+  terminal_colors = true,
+
+  -- Add or override highlights
+  on_highlights = function(hl, c)
+    -- Example: Make comments bold and use the frost color
+    hl.Comment = { fg = c.frost, bold = true }
+
+    -- Example: Add telescope support
+    hl.TelescopeNormal = { bg = c.nord1 }
+    hl.TelescopeBorder = { fg = c.nord3, bg = c.nord1 }
+  end,
+})
+
+vim.cmd.colorscheme("nord")
 ```
-
-## Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `transparent` | boolean | `false` | Disables background color for Normal, NormalFloat, and other core UI elements. |
-| `terminal_colors` | boolean | `true` | Configures the 16 colors used when opening a `:terminal` in Neovim. |
-| `on_highlights` | function | `function(hl, c) end` | A hook that lets you add or override any highlight group. |
 
 ## The Palette
 
@@ -59,3 +49,8 @@ In `on_highlights(hl, c)`, the `c` argument exposes the full palette. You can us
 - `c.yellow` (`nord13`)
 - `c.green` (`nord14`)
 - `c.purple` (`nord15`)
+
+## Acknowledgements
+
+- [shaunsingh/nord.nvim](https://github.com/shaunsingh/nord.nvim): A popular port, but diverges from the original colors and requires huge customization to match.
+- [gbprod/nord.nvim](https://github.com/gbprod/nord.nvim): Another good port that is close to the original, but includes built-in support for extra plugins.

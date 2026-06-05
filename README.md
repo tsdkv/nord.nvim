@@ -27,6 +27,7 @@ require("nord").setup({
   uniform_status = false,   -- Makes active and inactive statuslines the same color
   bold_separators = false,  -- Makes vertical window separators thicker/darker
   cursorline_bg = false,    -- Adds a background color to the current line number
+  underline = true,         -- Enable underlines on IncSearch, signature help, etc.
 
   -- Add or override highlights
   on_highlights = function(hl, c)
@@ -55,8 +56,7 @@ If you are migrating from the original `nord.vim`, the old `g:nord_*` global var
 | `g:nord_uniform_status_lines` | `uniform_status` |
 | `g:nord_bold_vertical_split_line`| `bold_separators` |
 | `g:nord_cursor_line_number_background`| `cursorline_bg` |
-
-*Note: Global toggles like `g:nord_underline` were removed in favor of native Neovim styling (e.g., undercurls for spelling).*
+| `g:nord_underline` | `underline` |
 
 ## The Palette
 

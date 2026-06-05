@@ -22,6 +22,8 @@ M.config = {
   bold_separators = false,
   --- Add a background color to the current line number
   cursorline_bg = false,
+  --- Enable underlines on IncSearch, active signature parameter, etc.
+  underline = true,
   --- Add or override highlights
   ---@param hl table<string, vim.api.keyset.highlight>
   ---@param c NordPalette
@@ -94,7 +96,7 @@ function M.build_highlights()
     Question = { fg = c.nord4 },
     QuickFixLine = { bg = c.nord1, bold = true },
     Search = { fg = c.nord1, bg = c.nord8 },
-    IncSearch = { fg = c.nord6, bg = c.nord10, underline = true },
+    IncSearch = { fg = c.nord6, bg = c.nord10, underline = cfg.underline },
     CurSearch = { link = "IncSearch" },
     SpecialKey = { fg = c.nord3 },
     SpellBad = { sp = c.nord11, undercurl = true },
@@ -178,7 +180,7 @@ function M.build_highlights()
     LspReferenceText = { bg = c.nord3 },
     LspReferenceRead = { bg = c.nord3 },
     LspReferenceWrite = { bg = c.nord3 },
-    LspSignatureActiveParameter = { fg = c.frost, underline = true },
+    LspSignatureActiveParameter = { fg = c.frost, underline = cfg.underline },
     LspCodeLens = { fg = c.comment },
 
     -- Diff

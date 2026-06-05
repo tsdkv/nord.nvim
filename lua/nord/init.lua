@@ -155,6 +155,9 @@ function M.build_highlights()
     Ignore = { fg = c.nord3 },
     Error = { fg = c.nord4, bg = c.error },
     Todo = { fg = c.yellow, bg = c.none },
+    Annotation = { link = "Decorator" },
+    Variable = { link = "Identifier" },
+    iCursor = { link = "Cursor" },
 
     -- Health
     healthError = { fg = c.error, bg = c.nord1 },
@@ -171,23 +174,40 @@ function M.build_highlights()
     DiagnosticUnderlineInfo = { undercurl = true, sp = c.frost },
     DiagnosticUnderlineHint = { undercurl = true, sp = c.accent },
 
+    -- LSP document highlights & signature help
+    LspReferenceText = { bg = c.nord3 },
+    LspReferenceRead = { bg = c.nord3 },
+    LspReferenceWrite = { bg = c.nord3 },
+    LspSignatureActiveParameter = { fg = c.frost, underline = true },
+    LspCodeLens = { fg = c.comment },
+
     -- Diff
-    DiffAdd = { fg = c.green, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
-    DiffChange = { fg = c.yellow, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
-    DiffDelete = { fg = c.error, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
-    DiffText = { fg = c.keyword, bg = cfg.uniform_diffs and c.nord1 or c.nord0 },
+    DiffAdd = { fg = c.green, bg = cfg.uniform_diffs and c.nord1 or c.nord0, reverse = not cfg.uniform_diffs },
+    DiffChange = { fg = c.yellow, bg = cfg.uniform_diffs and c.nord1 or c.nord0, reverse = not cfg.uniform_diffs },
+    DiffDelete = { fg = c.error, bg = cfg.uniform_diffs and c.nord1 or c.nord0, reverse = not cfg.uniform_diffs },
+    DiffText = { fg = c.keyword, bg = cfg.uniform_diffs and c.nord1 or c.nord0, reverse = not cfg.uniform_diffs },
+    diffAdded = { link = "DiffAdd" },
+    diffChanged = { link = "DiffChange" },
+    diffRemoved = { link = "DiffDelete" },
 
     -- GitSigns
     GitSignsAdd = { fg = c.green, bg = c.nord0 },
     GitSignsChange = { fg = c.yellow, bg = c.nord0 },
     GitSignsDelete = { fg = c.error, bg = c.nord0 },
     GitSignsUntracked = { fg = c.nord12, bg = c.nord0 },
+    GitSignsCurrentLineBlame = { link = "Comment" },
 
     -- Treesitter defaults
     ["@variable"] = { link = "Identifier" },
+    ["@variable.builtin"] = { fg = c.keyword },
+    ["@constant.builtin"] = { link = "Constant" },
     ["@function"] = { link = "Function" },
+    ["@function.builtin"] = { link = "Function" },
+    ["@function.macro"] = { link = "Function" },
     ["@keyword"] = { link = "Keyword" },
     ["@string"] = { link = "String" },
+    ["@string.regex"] = { link = "SpecialChar" },
+    ["@string.escape"] = { fg = c.yellow },
     ["@number"] = { link = "Number" },
     ["@boolean"] = { link = "Boolean" },
     ["@comment"] = { link = "Comment" },
@@ -197,6 +217,17 @@ function M.build_highlights()
     ["@punctuation.delimiter"] = { fg = c.nord6 },
     ["@punctuation.bracket"] = { fg = c.nord6 },
     ["@constructor"] = { fg = c.frost },
+    ["@tag"] = { fg = c.keyword },
+    ["@tag.attribute"] = { fg = c.nord7 },
+    ["@tag.delimiter"] = { fg = c.keyword },
+    ["@markup.heading"] = { fg = c.frost, bold = true },
+    ["@markup.link"] = { fg = c.frost },
+    ["@markup.link.url"] = { fg = c.nord4, underline = true },
+    ["@markup.raw"] = { fg = c.nord7 },
+    ["@markup.list"] = { fg = c.keyword },
+    ["@diff.plus"] = { link = "DiffAdd" },
+    ["@diff.minus"] = { link = "DiffDelete" },
+    ["@diff.delta"] = { link = "DiffChange" },
   }
 
   -- Apply user highlights
@@ -211,6 +242,7 @@ function M.load()
   end
 
   vim.o.termguicolors = true
+  vim.o.background = "dark"
   vim.g.colors_name = "nord"
 
   -- Intercept here if adding caching in the future:
@@ -219,9 +251,6 @@ function M.load()
   local hl = M.build_highlights()
 
   for group, val in pairs(hl) do
-    if type(val) == "string" then
-      val = { link = val }
-    end
     vim.api.nvim_set_hl(0, group, val)
   end
 
